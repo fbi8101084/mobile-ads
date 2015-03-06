@@ -5,13 +5,55 @@
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
     <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
     <title>行動版廣告</title>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="AdFactory.js"></script>
     <script src="AdLoc_forum.js"></script>
     <script src="AdTpl.js"></script>
     <script src="AdMap_80.js"></script>
     <script type="text/javascript">
-//        showNAdById("adLoc_153-0");
-        showNAdById("adLoc_999-0");
+        (function ($) {
+            $.cookie = {
+                set: function (name, value, limit) {
+                    limit = limit || 1;
+                    switch (limit) {
+                        case 'every day':
+                            var exp = (function () {
+                                var a = new Date(), tomorrow;
+                                a = a.setTime(a.getTime() + 86400000);
+                                tomorrow = new Date(a.getFullYear() + '-' + a.getMonth() + '-' + a.getDate());
+                                return tomorrow;
+                            })();
+                            break;
+                        default :
+                            var exp = new Date();
+                            exp.setTime(exp.getTime() + limit * 24 * 60 * 60 * 1000);
+                    }
+
+                    this.delete(name);
+                    document.cookie =  name + "="+ encodeURI(value) + ";expires=" + exp.toGMTString();
+                },
+                get: function (name) {
+                    var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+                    if(arr !== null) {
+                        return decodeURI(arr[2]);
+                    }
+                    return null;
+                },
+                delete: function (name) {
+                    var cval = this.get(name);
+                    if (null !== cval) {
+                        var exp = new Date();
+                        exp.setTime(exp.getTime() + -1);
+                        document.cookie = name + "="+ cval + ";expires=" + exp.toGMTString();
+                    }
+                }
+            };
+
+            $.cookie.set('test', 'aaaaaa小明213');
+            $.cookie.set('test2', 'bbbbbbb');
+            $.cookie.delete('test2');
+            $.cookie.delete('test');
+        })(jQuery);
     </script>
 </head>
 <body>
