@@ -60,59 +60,53 @@ this.action = function() {
     var $body, $window;
     $body = $(document.body);
     $window = $(window);
-    var $ad, $img, html, p, rex;
+    var $ad, $img, html, p, rex,
+        _this = this;
     $ad = $('#ad-full-page');
     $img = $ad.find('.ad-image');
     $img.load(function() {
-        $ad.css({
-            'padding-top': ($window.height() - $img[0].height) / 2 + 'px'
-        });
+        $ad.css({'padding-top': ($window.height() - $img[0].height) / 2 + 'px'});
         $ad.find('.ad-box').removeClass('hide');
-        this.cookie.set($img.src, 'fullpage', 'every day');
+        $ad.find('.ad-close-btn').click(function() {
+            _this.cookie.set($img[0].src, 'fullpage', 'every day');
+            return $ad.remove();
+        });
         return $ad.find('.ad-loading').addClass('hide');
     });
     $ad.height(5000);
-    $ad.find('.ad-close-btn').click(function() {
-        return $ad.remove();
-    });
 };
-this.isShow = function (src) {
-    return !!this.get(src);
+this.isShow = function(src) {
+    return (null === this.cookie.get(src));
 };
-this.cookie = {
-    set: function (name, value, limit) {
-        limit = limit || 1;
-        switch (limit) {
-            case 'every day':
-                var exp = (function () {
-                    var a = new Date(), tomorrow;
-                    a = a.setTime(a.getTime() + 86400000);
-                    tomorrow = new Date(a.getFullYear() + '-' + a.getMonth() + '-' + a.getDate());
-                    return tomorrow;
-                })();
-                break;
-            default :
-                var exp = new Date();
-                exp.setTime(exp.getTime() + limit * 24 * 60 * 60 * 1000);
-        }
-
-        this.delete(name);
-        document.cookie =  name + "="+ encodeURI(value) + ";expires=" + exp.toGMTString();
-    },
-    get: function (name) {
-        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
-        if(arr !== null) {
-            return decodeURI(arr[2]);
-        }
-        return null;
-    },
-    delete: function (name) {
-        var cval = this.get(name);
-        if (null !== cval) {
+this.cookie = {set: function(name, value, limit) {
+    limit = limit || 1;
+    switch (limit) {
+        case 'every day':
+            var exp = (function() {
+                var a = new Date(), tomorrow;
+                a.setTime(a.getTime() + 86400000);
+                tomorrow = new Date(a.getFullYear() + '-' + (a.getMonth() + 1) + '-' + a.getDate());
+                return tomorrow;
+            })();
+            break;
+        default:
             var exp = new Date();
-            exp.setTime(exp.getTime() + -1);
-            document.cookie = name + "="+ cval + ";expires=" + exp.toGMTString();
-        }
+            exp.setTime(exp.getTime() + limit * 24 * 60 * 60 * 1000);
     }
-};
+    this.delete(name);
+    document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString();
+},get: function(name) {
+    var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+    if (arr !== null) {
+        return decodeURI(arr[2]);
+    }
+    return null;
+},delete: function(name) {
+    var cval = this.get(name);
+    if (null !== cval) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() + -1);
+        document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+    }
+}};
 };
