@@ -24,13 +24,14 @@ this.show = function(){
         if (this.fix > this.Ads.length){ this.fix = this.Ads.length;    }
 
         for(var i=0;i< this.fix ; i++){
-            if (!this.isShow(AdMap[this.name][this.Ads[this.idx]]['C']['i'][0])) {
-                continue;
-            }
             if(typeof(this.idx) == "undefined"){
                 this.block == 0 ? this.idx = (AdToday.getSeconds()+i) % this.Ads.length : this.idx = (AdToday.getSeconds()+i+block) % this.Ads.length ;
             }else if (this.idx >= this.Ads.length){
                 this.idx = 0;
+            }
+
+            if (!this.isShow(AdMap[this.name][this.Ads[this.idx]]['C']['i'][0])) {
+                continue;
             }
 
             if (this.ShowedAds.length>=this.fix){  //同版位多區塊時使用
@@ -65,8 +66,9 @@ this.action = function() {
     $ad = $('#ad-full-page');
     $img = $ad.find('.ad-image');
     $img.load(function() {
-        $ad.css({'padding-top': ($window.height() - $img[0].height) / 2 + 'px'});
-        $ad.find('.ad-box').removeClass('hide');
+        $ad.find('.ad-box').removeClass('hide'); // set ad-box in middle of window
+        // get image's height after show image
+        $ad.css('padding-top', ($window.height() - $img.height()) / 2 + 'px');
         $ad.find('.ad-close-btn').click(function() {
             _this.cookie.set($img[0].src, 'fullpage', 'every day');
             return $ad.remove();
