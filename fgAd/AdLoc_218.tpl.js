@@ -1,7 +1,3 @@
-/*
- * 建立 this.channel 為 hot 和 news 保留兩個頻道 this.channel[dataType]，
- * 頻道中分別儲存 idx, ShowedAds 用以個別獨立控制要輸出的廣告。
- * */
 function Loc_218(block) {
     this.name = "Loc_218";
     this.fix = 1;
@@ -9,7 +5,11 @@ function Loc_218(block) {
     this.show = function () {
         try {
             var elements = document.getElementsByClassName("ad" + this.name + "-" + this.block),
-                adObj;
+                adObj,
+                channel;
+
+            Loc_218.channel = Loc_218.channel || {};
+            channel = Loc_218.channel;
 
             for (var i = 0; i < elements.length; i++) {
                 var isShow = elements[i].attributes['data-isshowed'].value;
@@ -18,15 +18,15 @@ function Loc_218(block) {
                     adObj = elements[i];
                     dataType = parseInt(adObj.attributes['data-type'].value, 10);
 
-                    if ('undefined' === typeof this.channel[dataType]) {
-                        this.channel[dataType] = {};
+                    if ('undefined' === typeof channel[dataType]) {
+                        channel[dataType] = {};
                     }
 
-                    if ('undefined' === typeof this.channel[dataType].idx) {
-                        this.channel[dataType].idx = 0;
+                    if ('undefined' === typeof channel[dataType].idx) {
+                        channel[dataType].idx = 0;
                     }
-                    if ('undefined' === typeof this.channel[dataType].ShowedAds) {
-                        this.channel[dataType].ShowedAds = [];
+                    if ('undefined' === typeof channel[dataType].ShowedAds) {
+                        channel[dataType].ShowedAds = [];
                     }
 
 
@@ -41,8 +41,8 @@ function Loc_218(block) {
                         this.channel[dataType].ShowedAds = [];
                     }
 
-                    this.idx       = this.channel[dataType].idx;
-                    this.ShowedAds = this.channel[dataType].ShowedAds;
+                    this.idx       = channel[dataType].idx;
+                    this.ShowedAds = channel[dataType].ShowedAds;
                     break;
                 }
             }
@@ -94,7 +94,7 @@ function Loc_218(block) {
 
             H = T.header() + H + T.footer();
 
-            this.channel[dataType].idx = this.idx;
+            channel[dataType].idx = this.idx;
 
             if (adObj) {
                 adObj.innerHTML = H;
@@ -125,4 +125,3 @@ function Loc_218(block) {
     };
 }
 Loc_218.prototype = new abstract_Loc();
-Loc_218.prototype.channel = {};
