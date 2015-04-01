@@ -33,12 +33,14 @@ function Loc_218(block) {
                     var adsObj = AdMap[this.name],
                         adLen = ('undefined' === typeof adsObj) ? 0 : this.keys(adsObj).length;
 
-                    // 判斷如果 廣告存在，且廣告數量小於 3 以下，且 ShowedAds 的長度等於廣告數量，則重置 ShowedAds
+                    // 判斷如果 廣告存在，且廣告數量大於等於 3 以以上，且 ShowedAds 的長度等於廣告數量，則重置"一次" ShowedAds
                     if (0 !== adLen &&
-                        3 >= adLen &&
-                        this.channel[dataType].ShowedAds.length === adLen
+                        3 <= adLen &&
+                        channel[dataType].ShowedAds.length === adLen &&
+                        !channel[dataType].isRepeated
                     ) {
-                        this.channel[dataType].ShowedAds = [];
+                        channel[dataType].ShowedAds = [];
+                        channel[dataType].isRepeated = true;
                     }
 
                     this.idx       = channel[dataType].idx;
