@@ -58,7 +58,7 @@ function Loc_218(block) {
                 this.length = from < 0 ? this.length + from : from;
                 return this.push.apply(this, rest);
             };
-            var i = 0, H = "", T, Tpl, block, dataType = 0;
+            var i = 0, H = "", T, Tpl, block;
             if (this.block != 0) {
                 block = this.fix;
             }
