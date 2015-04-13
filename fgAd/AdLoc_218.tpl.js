@@ -35,7 +35,7 @@ function Loc_218(block) {
 
                     // 判斷如果 廣告存在，且廣告數量大於等於 3 以以上，且 ShowedAds 的長度等於廣告數量，則重置"一次" ShowedAds
                     if (0 !== adLen &&
-                        3 <= adLen &&
+                        3 >= adLen &&
                         channel[dataType].ShowedAds.length === adLen &&
                         !channel[dataType].isRepeated
                     ) {
