@@ -24,8 +24,10 @@
 
   .ad-close-btn {
     font-size: 30px;
-    color: #999;
+    color: white;
     position: absolute;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 50%;
     line-height: 30px;
     width: 30px;
     height: 30px;
